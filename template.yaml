@@ -1,0 +1,34 @@
+name: xadmin-web-base
+kind: service-template
+version: 0.1.0
+
+variables:
+  module: xkit-template-v01
+  app_name: XAdmin
+  command_name: xkit-template
+  service_name: admin
+
+ignore:
+  - .git/**
+  - README.md
+  - README.en.md
+  - pkg/**
+  - logfile/**
+  - "*.log"
+  - "*.exe"
+  - go_build_*
+  - asynqmon*
+
+preserve:
+  - .gitignore
+  - go.mod
+  - go.sum
+  - configs/*.yaml
+  - internal/bootstrap/hooks.go
+  - internal/server/options.go
+  - internal/data/bootstrap/data.go
+  - internal/data/bootstrap/resources.go
+
+obsolete:
+  - cmd/server/wire.go
+  - cmd/server/wire_gen.go
