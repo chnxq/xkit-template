@@ -3,12 +3,14 @@ package server
 import (
 	"fmt"
 
-	"github.com/gorilla/handlers"
-
+	swaggerUI "github.com/chnxq/x-swagger"
 	"github.com/chnxq/xkitpkg/app"
 	conf "github.com/chnxq/xkitpkg/conf/v1"
 	httptransport "github.com/chnxq/xkitpkg/transport/http"
 	httppprof "github.com/chnxq/xkitpkg/transport/http/pprof"
+	"github.com/gorilla/handlers"
+
+	"xkit-template-v01/cmd/server/assets"
 )
 
 func HTTPServerOptions(appCtx *app.AppCtx) ([]httptransport.ServerOption, error) {
@@ -51,13 +53,25 @@ func RegisterConfiguredHTTPHandlers(srv *httptransport.Server, appCtx *app.AppCt
 	if srv == nil {
 		return
 	}
-	if cfg := restConfig(appCtx); cfg == nil || !cfg.GetEnablePprof() {
+	cfg := restConfig(appCtx)
+	if cfg == nil {
 		return
 	}
 
-	handler := httppprof.NewHandler()
-	srv.Handle("/debug/pprof", handler)
-	srv.HandlePrefix("/debug/pprof/", handler)
+	if cfg.GetEnablePprof() {
+		handler := httppprof.NewHandler()
+		srv.Handle("/debug/pprof", handler)
+		srv.HandlePrefix("/debug/pprof/", handler)
+	}
+
+	if cfg.GetEnableSwagger() && len(assets.OpenApiData) > 0 {
+		swaggerUI.RegisterSwaggerUIServerWithOption(
+			srv,
+			swaggerUI.WithTitle("XAdmin API"),
+			swaggerUI.WithBasePath("/docs/"),
+			swaggerUI.WithMemoryData(assets.OpenApiData, "yaml"),
+		)
+	}
 }
 
 func restConfigFilters(cfg *conf.Server_REST) []httptransport.FilterFunc {

@@ -16,6 +16,8 @@ English version: [README.en.md](README.en.md)
 - `internal/data/bootstrap`：数据层公共 provider 预留位置。
 - `template.yaml`：模板变量、忽略规则、保留文件和废弃文件清单。
 
+`cmd/server/assets/openapi.yaml` 是 Swagger UI 使用的嵌入式 OpenAPI 文档。目标项目中应在 `api` 目录执行 `buf generate --template buf.admin.openapi.gen.yaml`，让 Buf 将当前文档写入 `../cmd/server/assets`。
+
 ## 推荐使用方式
 
 在 `xkit` 仓库中执行：
@@ -136,3 +138,5 @@ go test ./...
 go test ./...
 go run ./cmd/server server -config_path ./configs
 ```
+
+当 `server.rest.enable_swagger` 为 `true` 时，Swagger UI 会挂载在 `/docs/`，嵌入的 OpenAPI 文档可通过 `/docs/openapi.yaml` 访问。

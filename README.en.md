@@ -16,6 +16,8 @@ Chinese version: [README.md](README.md)
 - `internal/data/bootstrap`: extension point for shared data providers.
 - `template.yaml`: template variables, ignore rules, preserved files, and obsolete files.
 
+`cmd/server/assets/openapi.yaml` is the embedded OpenAPI document used by Swagger UI. In generated projects, run `buf generate --template buf.admin.openapi.gen.yaml` from the target `api` directory so Buf writes the current document to `../cmd/server/assets`.
+
 ## Recommended Usage
 
 Run from the `xkit` repository:
@@ -141,3 +143,5 @@ After applying the template and generating resources in a target project, verify
 go test ./...
 go run ./cmd/server server -config_path ./configs
 ```
+
+When `server.rest.enable_swagger` is true, Swagger UI is served at `/docs/` and the embedded OpenAPI document is available at `/docs/openapi.yaml`.
