@@ -12,13 +12,6 @@ import (
 	"github.com/chnxq/xkitpkg/logger"
 	"github.com/chnxq/xkitpkg/registry"
 	"github.com/chnxq/xkitpkg/tracer"
-
-	_ "github.com/chnxq/xkitpkg/config/consul"
-	_ "github.com/chnxq/xkitpkg/config/etcd"
-	_ "github.com/chnxq/xkitpkg/logger/fluentd"
-	_ "github.com/chnxq/xkitpkg/logger/zap"
-	_ "github.com/chnxq/xkitpkg/registry/consul"
-	_ "github.com/chnxq/xkitpkg/registry/etcd"
 )
 
 func NewLogger(serverConfig *conf.ServerConfig) (log.Logger, func(), error) {

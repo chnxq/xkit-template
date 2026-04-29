@@ -11,7 +11,7 @@ Chinese version: [README.md](README.md)
 - `cmd/server`: service command entry.
 - `cmd/server/assets`: startup assets such as OpenAPI and RBAC files.
 - `configs`: default configuration files.
-- `internal/bootstrap`: config loading, logging, registry, tracing, and app assembly.
+- `internal/bootstrap`: config loading, factory preloading, logging, registry, tracing, and app assembly.
 - `internal/server`: HTTP/REST, gRPC, Asynq, and SSE transport construction plus registration hooks.
 - `internal/data/bootstrap`: extension point for shared data providers.
 - `template.yaml`: template variables, ignore rules, preserved files, and obsolete files.
@@ -75,6 +75,7 @@ The template owns the stable startup skeleton:
 - `cmd/server/server.go`
 - `internal/bootstrap/app.go`
 - `internal/bootstrap/cleanup.go`
+- `internal/bootstrap/factories.go`
 - `internal/bootstrap/infra.go`
 - `internal/bootstrap/hooks.go`
 - `internal/server/asynq.go`
@@ -100,8 +101,6 @@ The template owns the stable startup skeleton:
 - `internal/server/grpc_register.gen.go`
 - `internal/service/*_service.gen.go`
 - `internal/data/repo/*_repo.gen.go`
-- `internal/service/providers/wire_set.gen.go`
-- `internal/data/providers/wire_set.gen.go`
 
 ## Manual Extension Points
 

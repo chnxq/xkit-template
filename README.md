@@ -11,7 +11,7 @@ English version: [README.en.md](README.en.md)
 - `cmd/server`：服务命令入口。
 - `cmd/server/assets`：OpenAPI、RBAC 等启动资产。
 - `configs`：默认配置文件。
-- `internal/bootstrap`：配置加载、日志、注册中心、trace 和应用装配入口。
+- `internal/bootstrap`：配置加载、工厂预加载、日志、注册中心、trace 和应用装配入口。
 - `internal/server`：HTTP/gRPC server 构造和注册挂点。
 - `internal/data/bootstrap`：数据层公共 provider 预留位置。
 - `template.yaml`：模板变量、忽略规则、保留文件和废弃文件清单。
@@ -75,6 +75,7 @@ go run ./cmd/xkit gen all admin `
 - `cmd/server/server.go`
 - `internal/bootstrap/app.go`
 - `internal/bootstrap/cleanup.go`
+- `internal/bootstrap/factories.go`
 - `internal/bootstrap/infra.go`
 - `internal/bootstrap/hooks.go`
 - `internal/server/asynq.go`
@@ -95,8 +96,6 @@ go run ./cmd/xkit gen all admin `
 - `internal/server/grpc_register.gen.go`
 - `internal/service/*_service.gen.go`
 - `internal/data/repo/*_repo.gen.go`
-- `internal/service/providers/wire_set.gen.go`
-- `internal/data/providers/wire_set.gen.go`
 
 ## 手写扩展点
 
