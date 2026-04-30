@@ -8,9 +8,9 @@ require (
 	github.com/chnxq/x-crud/viewer v0.0.0-20260411151944-a61448f9f7bc
 	github.com/chnxq/x-swagger v0.0.0-20260402140018-ff19349a8f00
 	github.com/chnxq/x-utils v0.0.0-20260430084133-417cf92dc6f1
-	github.com/chnxq/xkitmod v0.0.0-20260411132219-50da08594d1b
-	github.com/chnxq/xkitmod/algs v0.0.0-20260411132219-50da08594d1b
-	github.com/chnxq/xkitmod/log v0.0.0-20260411132219-50da08594d1b
+	github.com/chnxq/xkitmod v0.0.0-20260430105334-070840386dea
+	github.com/chnxq/xkitmod/algs v0.0.0-20260430105334-070840386dea
+	github.com/chnxq/xkitmod/log v0.0.0-20260430105334-070840386dea
 	github.com/chnxq/xkitpkg/app v0.0.0-20260421141638-80e4b484ff8f
 	github.com/chnxq/xkitpkg/conf v0.0.0-20260421141638-80e4b484ff8f
 	github.com/chnxq/xkitpkg/config v0.0.0-20260421141638-80e4b484ff8f
@@ -38,8 +38,8 @@ require (
 	github.com/armon/go-metrics v0.5.4 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/chnxq/xkitmod/config v0.0.0-20260411132219-50da08594d1b // indirect
-	github.com/chnxq/xkitmod/selector v0.0.0-20260411132219-50da08594d1b // indirect
+	github.com/chnxq/xkitmod/config v0.0.0-20260430105334-070840386dea // indirect
+	github.com/chnxq/xkitmod/selector v0.0.0-20260430105334-070840386dea // indirect
 	github.com/chnxq/xkitpkg v0.0.0-20260421141638-80e4b484ff8f // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect
 	github.com/coreos/go-systemd/v22 v22.7.0 // indirect
