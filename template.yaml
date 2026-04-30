@@ -25,7 +25,9 @@ preserve:
   - go.sum
   - configs/*.yaml
   - internal/bootstrap/hooks.go
+  - internal/server/db_logging.go
   - internal/server/options.go
+  - internal/server/manual_http.go
   - internal/data/bootstrap/data.go
   - internal/data/bootstrap/resources.go
 

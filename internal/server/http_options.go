@@ -14,7 +14,6 @@ import (
 )
 
 func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.ServerOption, error) {
-	_ = data
 	cfg := restConfig(appCtx)
 	opts := []httptransport.ServerOption{
 		httptransport.Address(":8000"),
@@ -41,7 +40,16 @@ func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.
 		}
 	}
 
-	if middlewares := append(commonServerMiddlewares(appCtx, cfg.GetMiddleware()), HTTPMiddlewares(appCtx)...); len(middlewares) > 0 {
+	var cfgMiddleware *conf.Middleware
+	if cfg != nil {
+		cfgMiddleware = cfg.GetMiddleware()
+	}
+	middlewares := commonServerMiddlewares(appCtx, cfgMiddleware)
+	middlewares = append(middlewares, HTTPMiddlewares(appCtx)...)
+	if cfg != nil && cfg.GetEnableDbLogging() {
+		middlewares = append(middlewares, databaseLoggingMiddleware(data))
+	}
+	if len(middlewares) > 0 {
 		opts = append(opts, httptransport.Middleware(middlewares...))
 	}
 	if filters := restConfigFilters(cfg); len(filters) > 0 {

@@ -5,6 +5,7 @@ replace github.com/armon/go-metrics => github.com/hashicorp/go-metrics v0.4.1
 go 1.26.0
 
 require (
+	github.com/chnxq/x-crud/viewer v0.0.0-20260411151944-a61448f9f7bc
 	github.com/chnxq/x-swagger v0.0.0-20260402140018-ff19349a8f00
 	github.com/chnxq/x-utils v0.0.0-20260430084133-417cf92dc6f1
 	github.com/chnxq/xkitmod v0.0.0-20260411132219-50da08594d1b
