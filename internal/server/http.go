@@ -7,8 +7,10 @@ import (
 	httptransport "github.com/chnxq/xkitpkg/transport/http"
 )
 
-func NewHTTPServer(appCtx *app.AppCtx, services GeneratedHTTPServices) (*httptransport.Server, error) {
-	opts, err := HTTPServerOptions(appCtx)
+type GeneratedData interface{}
+
+func NewHTTPServer(appCtx *app.AppCtx, services GeneratedHTTPServices, data GeneratedData) (*httptransport.Server, error) {
+	opts, err := HTTPServerOptions(appCtx, data)
 	if err != nil {
 		return nil, fmt.Errorf("http server options: %w", err)
 	}

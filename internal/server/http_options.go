@@ -13,7 +13,8 @@ import (
 	"xkit-template-v01/cmd/server/assets"
 )
 
-func HTTPServerOptions(appCtx *app.AppCtx) ([]httptransport.ServerOption, error) {
+func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.ServerOption, error) {
+	_ = data
 	cfg := restConfig(appCtx)
 	opts := []httptransport.ServerOption{
 		httptransport.Address(":8000"),
