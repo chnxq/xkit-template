@@ -1,7 +1,7 @@
 data:
   database:
     driver: "postgres"
-    source: "host=localhost port=5432 user=postgres password=*Abcd123456 dbname=admin sslmode=disable"
+    source: "host=localhost port=5432 user=postgres password=~Xyz4321Ab dbname=admin sslmode=disable"
 #    driver: "mysql"
 #    source: "root:112233@tcp(localhost:3306)/admin?parseTime=true&charset=utf8mb4&loc=Asia%2FShanghai"
     migrate: true
@@ -14,7 +14,7 @@ data:
 
   redis:
     addr: "localhost:6379"
-    password: "*Abcd123456"
+    password: "~Xyz4321Ab"
     dial_timeout: 10s
     read_timeout: 0.4s
     write_timeout: 0.6s
