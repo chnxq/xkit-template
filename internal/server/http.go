@@ -17,6 +17,7 @@ func NewHTTPServer(appCtx *app.AppCtx, services GeneratedHTTPServices, data Gene
 	srv := httptransport.NewServer(opts...)
 	RegisterGeneratedHTTPServices(srv, services)
 	RegisterManualHTTPServices(srv, appCtx)
+	RegisterManualHTTPServicesWithData(srv, appCtx, data)
 	RegisterConfiguredHTTPHandlers(srv, appCtx)
 	return srv, nil
 }

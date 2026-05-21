@@ -7,8 +7,8 @@ import (
 	grpctransport "github.com/chnxq/xkitpkg/transport/grpc"
 )
 
-func NewGRPCServer(appCtx *app.AppCtx, services GeneratedGRPCServices) (*grpctransport.Server, error) {
-	opts, err := GRPCServerOptions(appCtx)
+func NewGRPCServer(appCtx *app.AppCtx, services GeneratedGRPCServices, data GeneratedData) (*grpctransport.Server, error) {
+	opts, err := GRPCServerOptions(appCtx, data)
 	if err != nil {
 		return nil, fmt.Errorf("grpc server options: %w", err)
 	}

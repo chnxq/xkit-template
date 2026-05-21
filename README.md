@@ -93,6 +93,7 @@ go run ./cmd/xkit gen all admin `
 `xkit gen all` 只应该覆盖资源相关的 `*.gen.go` 文件，例如：
 
 - `internal/bootstrap/generated_servers.gen.go`
+- `internal/bootstrap/generated_data_providers.gen.go`
 - `internal/data/bootstrap/ent_client.gen.go`
 - `internal/server/rest_register.gen.go`
 - `internal/server/grpc_register.gen.go`
@@ -104,7 +105,9 @@ go run ./cmd/xkit gen all admin `
 这些文件用于后续项目定制，并且模板同步时默认保留：
 
 - `internal/bootstrap/hooks.go`：额外 transport server、生命周期或后台任务。
+- `internal/bootstrap/generated_hooks_ext.go`：`xkit gen bootstrap` 首次创建的 GeneratedData/GeneratedServices 扩展 hook。
 - `internal/server/options.go`：项目业务侧 HTTP/gRPC middleware 挂点。
+- `internal/server/manual_http_data.go`：项目业务侧需要 `GeneratedData` 的手写 HTTP 路由挂点。
 - `internal/data/bootstrap/data.go`：Redis、缓存、OSS、队列等公共数据 provider。
 - `internal/data/bootstrap/resources.go`：公共数据资源生命周期入口。
 - `internal/service/*_service_ext.go`：业务服务手写扩展。

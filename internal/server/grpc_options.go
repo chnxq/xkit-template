@@ -7,7 +7,8 @@ import (
 	grpctransport "github.com/chnxq/xkitpkg/transport/grpc"
 )
 
-func GRPCServerOptions(appCtx *app.AppCtx) ([]grpctransport.ServerOption, error) {
+func GRPCServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]grpctransport.ServerOption, error) {
+	_ = data
 	cfg := grpcConfig(appCtx)
 	opts := []grpctransport.ServerOption{
 		grpctransport.Address(":9000"),

@@ -11,18 +11,23 @@ import (
 	"xkit-template-v01/internal/server"
 )
 
-type GeneratedData struct{}
+type GeneratedData struct {
+	AppContext *app.AppCtx
+}
 
 func NewGeneratedData(appCtx *app.AppCtx) (*GeneratedData, func(), error) {
-	_ = appCtx
-	return &GeneratedData{}, func() {}, nil
+	data := &GeneratedData{AppContext: appCtx}
+	data.afterInit()
+	return data, func() {}, nil
 }
 
 type GeneratedServices struct{}
 
 func NewGeneratedServices(appCtx *app.AppCtx, data *GeneratedData) *GeneratedServices {
+	services := &GeneratedServices{}
 	_, _ = appCtx, data
-	return &GeneratedServices{}
+	services.afterInit(data)
+	return services
 }
 
 func (services *GeneratedServices) HTTP() server.GeneratedHTTPServices {
@@ -58,7 +63,7 @@ func (components *GeneratedComponents) Servers(appCtx *app.AppCtx) ([]transport.
 	if err != nil {
 		return nil, fmt.Errorf("new generated http server: %w", err)
 	}
-	grpcServer, err := server.NewGRPCServer(appCtx, components.Services.GRPC())
+	grpcServer, err := server.NewGRPCServer(appCtx, components.Services.GRPC(), components.Data)
 	if err != nil {
 		return nil, fmt.Errorf("new generated grpc server: %w", err)
 	}
