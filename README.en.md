@@ -108,12 +108,16 @@ The template owns the stable startup skeleton:
 
 These files are intended for project-specific code and are preserved during template sync:
 
+- `internal/bootstrap/generated_hooks_ext.go`: one-time bootstrap hook file created by `xkit gen bootstrap`.
 - `internal/bootstrap/hooks.go`: extra transport servers, lifecycle hooks, or background jobs.
 - `internal/server/options.go`: project-specific HTTP/gRPC business middleware.
+- `internal/server/manual_http_data.go`: project-specific manual HTTP hook that needs `GeneratedData`.
 - `internal/data/bootstrap/data.go`: shared data providers such as Redis, cache, OSS, or queues.
 - `internal/data/bootstrap/resources.go`: lifecycle entry for shared data resources.
 - `internal/service/*_service_ext.go`: handwritten service extensions.
 - `internal/data/repo/*_repo_ext.go`: handwritten repository extensions.
+
+`internal/server/manual_http.go` is not a preserved business extension file. It is template-owned baseline wiring and should be replaced during template force sync when the template evolves.
 
 ## Template Rules
 

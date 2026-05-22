@@ -113,6 +113,8 @@ go run ./cmd/xkit gen all admin `
 - `internal/service/*_service_ext.go`：业务服务手写扩展。
 - `internal/data/repo/*_repo_ext.go`：数据访问手写扩展。
 
+`internal/server/manual_http.go` 不再作为项目 preserve 扩展文件保留。它属于模板拥有的基线装配文件；需要 `GeneratedData` 的项目手写 HTTP 逻辑应放在 `internal/server/manual_http_data.go`。
+
 ## 模板规则
 
 `template.yaml` 中：
