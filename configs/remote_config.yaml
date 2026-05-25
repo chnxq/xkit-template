@@ -1,6 +1,6 @@
 # 远程配置服务
 config:
-  type: ""
+  type: "etcd"
   etcd:
     endpoints: ["localhost:2379"]
     timeout: "5s"
