@@ -6,25 +6,25 @@ go 1.26.0
 
 require (
 	github.com/chnxq/x-crud/viewer v0.0.0-20260411151944-a61448f9f7bc
-	github.com/chnxq/x-swagger v0.0.0-20260506073243-93fbefa82a29
+	github.com/chnxq/x-swagger v0.0.0-20260529105209-02745c8a5170
 	github.com/chnxq/x-utils v0.0.0-20260430084133-417cf92dc6f1
-	github.com/chnxq/xkitmod v0.0.0-20260503151929-698fedcddddd
-	github.com/chnxq/xkitmod/algs v0.0.0-20260503151929-698fedcddddd
-	github.com/chnxq/xkitmod/log v0.0.0-20260503151929-698fedcddddd
-	github.com/chnxq/xkitpkg/app v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/conf v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/config v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/config/consul v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/config/etcd v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/logger v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/logger/fluentd v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/logger/zap v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/middleware v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/registry v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/registry/consul v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/registry/etcd v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/tracer v0.0.0-20260421141638-80e4b484ff8f
-	github.com/chnxq/xkitpkg/transport v0.0.0-20260421141638-80e4b484ff8f
+	github.com/chnxq/xkitmod v0.0.0-20260529105211-b1cd4c65f020
+	github.com/chnxq/xkitmod/algs v0.0.0-20260529105211-b1cd4c65f020
+	github.com/chnxq/xkitmod/log v0.0.0-20260529105211-b1cd4c65f020
+	github.com/chnxq/xkitpkg/app v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/conf v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/config v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/config/consul v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/config/etcd v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/logger v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/logger/fluentd v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/logger/zap v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/middleware v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/registry v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/registry/consul v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/registry/etcd v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/tracer v0.0.0-20260529105210-f5ea09d00e89
+	github.com/chnxq/xkitpkg/transport v0.0.0-20260529105210-f5ea09d00e89
 	github.com/gorilla/handlers v1.5.2
 	google.golang.org/grpc v1.81.1
 )
@@ -38,7 +38,7 @@ require (
 	github.com/armon/go-metrics v0.5.4 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/chnxq/xkitmod/config v0.0.0-20260503151929-698fedcddddd // indirect
+	github.com/chnxq/xkitmod/config v0.0.0-20260529105211-b1cd4c65f020 // indirect
 	github.com/chnxq/xkitmod/selector v0.0.0-20260503151929-698fedcddddd // indirect
 	github.com/chnxq/xkitpkg v0.0.0-20260421141638-80e4b484ff8f // indirect
 	github.com/coreos/go-semver v0.3.1 // indirect
@@ -91,33 +91,33 @@ require (
 	go.etcd.io/etcd/client/pkg/v3 v3.6.11 // indirect
 	go.etcd.io/etcd/client/v3 v3.6.11 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/contrib/bridges/otelzap v0.18.0 // indirect
-	go.opentelemetry.io/otel v1.43.0 // indirect
+	go.opentelemetry.io/contrib/bridges/otelzap v0.19.0 // indirect
+	go.opentelemetry.io/otel v1.44.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.17.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.19.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.43.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.43.0 // indirect
-	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.43.0 // indirect
-	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.43.0 // indirect
-	go.opentelemetry.io/otel/exporters/zipkin v1.43.0 // indirect
-	go.opentelemetry.io/otel/log v0.19.0 // indirect
-	go.opentelemetry.io/otel/metric v1.43.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.43.0 // indirect
-	go.opentelemetry.io/otel/sdk/log v0.19.0 // indirect
-	go.opentelemetry.io/otel/trace v1.43.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlplog/otlploggrpc v0.20.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.44.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.44.0 // indirect
+	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.44.0 // indirect
+	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.44.0 // indirect
+	go.opentelemetry.io/otel/exporters/zipkin v1.44.0 // indirect
+	go.opentelemetry.io/otel/log v0.20.0 // indirect
+	go.opentelemetry.io/otel/metric v1.44.0 // indirect
+	go.opentelemetry.io/otel/sdk v1.44.0 // indirect
+	go.opentelemetry.io/otel/sdk/log v0.20.0 // indirect
+	go.opentelemetry.io/otel/trace v1.44.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.10.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
+	golang.org/x/exp v0.0.0-20260528193900-50dc527dd6c7 // indirect
 	golang.org/x/net v0.55.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20260519071638-aa98bba5eb94 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260519071638-aa98bba5eb94 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260526163538-3dc84a4a5aaa // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/cenkalti/backoff.v1 v1.1.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
