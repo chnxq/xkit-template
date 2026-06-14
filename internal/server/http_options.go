@@ -6,6 +6,7 @@ import (
 	swaggerUI "github.com/chnxq/x-swagger"
 	"github.com/chnxq/xkitpkg/app"
 	conf "github.com/chnxq/xkitpkg/conf/v1"
+	serverutils "github.com/chnxq/xkitpkg/server_utils"
 	httptransport "github.com/chnxq/xkitpkg/transport/http"
 	httppprof "github.com/chnxq/xkitpkg/transport/http/pprof"
 	"github.com/gorilla/handlers"
@@ -30,7 +31,7 @@ func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.
 			opts = append(opts, httptransport.Timeout(cfg.GetTimeout().AsDuration()))
 		}
 		if cfg.GetTls() != nil {
-			tlsConfig, err := loadServerTLSConfig(cfg.GetTls())
+			tlsConfig, err := serverutils.LoadServerTLSConfig(cfg.GetTls())
 			if err != nil {
 				return nil, fmt.Errorf("load rest tls config: %w", err)
 			}
@@ -47,7 +48,9 @@ func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.
 	middlewares := commonServerMiddlewares(appCtx, cfgMiddleware)
 	middlewares = append(middlewares, HTTPMiddlewares(appCtx)...)
 	if cfg != nil && cfg.GetEnableDbLogging() {
-		middlewares = append(middlewares, databaseLoggingMiddleware(data))
+		if provider, ok := any(data).(serverutils.DatabaseLoggingData); ok {
+			middlewares = append(middlewares, serverutils.DatabaseLoggingMiddleware(provider))
+		}
 	}
 	if len(middlewares) > 0 {
 		opts = append(opts, httptransport.Middleware(middlewares...))
