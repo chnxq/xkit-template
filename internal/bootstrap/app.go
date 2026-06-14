@@ -96,6 +96,7 @@ func newAppContext(ctx context.Context, opts Options, serverConfig *conf.ServerC
 	if err != nil {
 		return nil, err
 	}
+	registerRuntimeConfigAppliers(appCtx)
 	return appCtx, nil
 }
 
