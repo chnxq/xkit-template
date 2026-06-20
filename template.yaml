@@ -26,6 +26,7 @@ preserve:
   - configs/*.yaml
   - internal/bootstrap/hooks.go
   - internal/bootstrap/generated_hooks_ext.go
+  - internal/bootstrap/modules.go
   - internal/server/db_logging.go
   - internal/server/options.go
   - internal/server/manual_http_data.go

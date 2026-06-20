@@ -111,8 +111,18 @@ func initDataResources(appCtx *app.AppCtx, cleanup *CleanupStack) error {
 }
 
 func newTransportServers(appCtx *app.AppCtx, cleanup *CleanupStack) ([]transport.Server, error) {
-	generatedServers, generatedCleanup, err := NewGeneratedServers(appCtx)
+	components, generatedCleanup, err := NewGeneratedComponents(appCtx)
 	cleanup.Add(generatedCleanup)
+	if err != nil {
+		return nil, err
+	}
+
+	moduleRuntimes, err := loadHostModules(appCtx, cleanup)
+	if err != nil {
+		return nil, err
+	}
+
+	generatedServers, err := components.Servers(appCtx, moduleRuntimes)
 	if err != nil {
 		return nil, err
 	}
