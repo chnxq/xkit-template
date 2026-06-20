@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	Name        = "XAdmin"
+	Name        = "Admin"
 	CommandName = "xkit-template"
 	Version     = "dev"
 	BuildTime   = "unknown"
