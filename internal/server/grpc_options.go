@@ -9,7 +9,6 @@ import (
 )
 
 func GRPCServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]grpctransport.ServerOption, error) {
-	_ = data
 	cfg := grpcConfig(appCtx)
 	opts := []grpctransport.ServerOption{
 		grpctransport.Address(":9000"),
@@ -34,9 +33,26 @@ func GRPCServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]grpctransport.
 				opts = append(opts, grpctransport.TLSConfig(tlsConfig))
 			}
 		}
+		if appCtx != nil && cfg.GetMiddleware() != nil {
+			appCtx.NewLoggerHelper("transport/grpc").Debugf(
+				"GRPC middleware config: logging=%t recovery=%t tracing=%t validate=%t metadata=%t breaker=%t limiter=%t",
+				cfg.GetMiddleware().GetEnableLogging(),
+				cfg.GetMiddleware().GetEnableRecovery(),
+				cfg.GetMiddleware().GetEnableTracing(),
+				cfg.GetMiddleware().GetEnableValidate(),
+				cfg.GetMiddleware().GetEnableMetadata(),
+				cfg.GetMiddleware().GetEnableCircuitBreaker(),
+				cfg.GetMiddleware().GetLimiter() != nil,
+			)
+		}
 	}
 
-	if middlewares := append(commonServerMiddlewares(appCtx, cfg.GetMiddleware()), GRPCMiddlewares(appCtx)...); len(middlewares) > 0 {
+	middlewares := commonServerMiddlewares(appCtx, cfg.GetMiddleware())
+	if authViewer := authViewerMiddleware(data); authViewer != nil {
+		middlewares = append(middlewares, authViewer)
+	}
+	middlewares = append(middlewares, GRPCMiddlewares(appCtx)...)
+	if len(middlewares) > 0 {
 		opts = append(opts, grpctransport.Middleware(middlewares...))
 	}
 	return opts, nil

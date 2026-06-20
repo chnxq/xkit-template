@@ -6,6 +6,7 @@ import (
 	"github.com/chnxq/xkitpkg/app"
 	"github.com/chnxq/xkitpkg/transport"
 
+	taskruntime "xkit-template-v01/internal/task/runtime"
 	"xkit-template-v01/internal/server"
 )
 
@@ -19,7 +20,15 @@ func NewGeneratedData(appCtx *app.AppCtx) (*GeneratedData, func(), error) {
 	return data, func() {}, nil
 }
 
-type GeneratedServices struct{}
+type generatedTaskService struct{}
+
+func (generatedTaskService) TaskScheduler() *taskruntime.Scheduler { return nil }
+func (generatedTaskService) TaskLogger() taskruntime.Logger        { return nil }
+
+type GeneratedServices struct {
+	Task      generatedTaskService
+	TaskGroup generatedTaskService
+}
 
 func NewGeneratedServices(appCtx *app.AppCtx, data *GeneratedData) *GeneratedServices {
 	services := &GeneratedServices{}

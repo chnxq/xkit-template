@@ -44,8 +44,24 @@ func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.
 	var cfgMiddleware *conf.Middleware
 	if cfg != nil {
 		cfgMiddleware = cfg.GetMiddleware()
+		if appCtx != nil {
+			appCtx.NewLoggerHelper("transport/http").Debugf(
+				"REST middleware config: logging=%t recovery=%t tracing=%t validate=%t metadata=%t breaker=%t limiter=%t db_logging=%t",
+				cfgMiddleware.GetEnableLogging(),
+				cfgMiddleware.GetEnableRecovery(),
+				cfgMiddleware.GetEnableTracing(),
+				cfgMiddleware.GetEnableValidate(),
+				cfgMiddleware.GetEnableMetadata(),
+				cfgMiddleware.GetEnableCircuitBreaker(),
+				cfgMiddleware.GetLimiter() != nil,
+				cfg.GetEnableDbLogging(),
+			)
+		}
 	}
 	middlewares := commonServerMiddlewares(appCtx, cfgMiddleware)
+	if authViewer := authViewerMiddleware(data); authViewer != nil {
+		middlewares = append(middlewares, authViewer)
+	}
 	middlewares = append(middlewares, HTTPMiddlewares(appCtx)...)
 	if cfg != nil && cfg.GetEnableDbLogging() {
 		if provider, ok := any(data).(serverutils.DatabaseLoggingData); ok {
@@ -79,7 +95,7 @@ func RegisterConfiguredHTTPHandlers(srv *httptransport.Server, appCtx *app.AppCt
 	if cfg.GetEnableSwagger() && len(assets.OpenApiData) > 0 {
 		swaggerUI.RegisterSwaggerUIServerWithOption(
 			srv,
-			swaggerUI.WithTitle("XAdmin API"),
+			swaggerUI.WithTitle("API文档"),
 			swaggerUI.WithBasePath("/docs/"),
 			swaggerUI.WithMemoryData(assets.OpenApiData, "yaml"),
 		)

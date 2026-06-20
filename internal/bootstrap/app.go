@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	taskruntime "xkit-template-v01/internal/task"
 	"github.com/chnxq/xkitpkg/app"
 	conf "github.com/chnxq/xkitpkg/conf/v1"
 	"github.com/chnxq/xkitpkg/config"
@@ -51,7 +52,7 @@ func Initialize(ctx context.Context, opts Options) (*app.App, func(), error) {
 
 func normalizeOptions(opts Options) Options {
 	if opts.Name == "" {
-		opts.Name = "XAdmin"
+		opts.Name = "Admin"
 	}
 	if opts.Version == "" {
 		opts.Version = "dev"
@@ -127,14 +128,31 @@ func newTransportServers(appCtx *app.AppCtx, cleanup *CleanupStack) ([]transport
 		return nil, err
 	}
 
-	manualServers, manualCleanup, err := NewManualServers(appCtx)
+	manualBundle, manualCleanup, err := NewManualServers(appCtx)
 	cleanup.Add(manualCleanup)
 	if err != nil {
 		return nil, err
 	}
+	if cleanupTaskRuntime, err := registerTaskRuntime(appCtx.AppContext(), components); err != nil {
+		return nil, err
+	} else {
+		cleanup.Add(cleanupTaskRuntime)
+	}
 
-	servers := make([]transport.Server, 0, len(generatedServers)+len(manualServers))
+	servers := make([]transport.Server, 0, len(generatedServers)+len(manualBundle.Servers))
 	servers = append(servers, generatedServers...)
-	servers = append(servers, manualServers...)
+	servers = append(servers, manualBundle.Servers...)
 	return servers, nil
+}
+
+func registerTaskRuntime(ctx context.Context, components *GeneratedComponents) (func(), error) {
+	if components == nil || components.Services == nil {
+		return func() {}, nil
+	}
+	return taskruntime.RegisterServices(
+		ctx,
+		components.Services.Task.TaskScheduler(),
+		components.Services.TaskGroup.TaskScheduler(),
+		components.Services.Task.TaskLogger(),
+	)
 }

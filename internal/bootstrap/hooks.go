@@ -7,7 +7,11 @@ import (
 	"xkit-template-v01/internal/server"
 )
 
-func NewManualServers(appCtx *app.AppCtx) ([]transport.Server, func(), error) {
+type ManualServers struct {
+	Servers []transport.Server
+}
+
+func NewManualServers(appCtx *app.AppCtx) (*ManualServers, func(), error) {
 	servers := make([]transport.Server, 0, 2)
 
 	asynqServer, err := server.NewAsynqServer(appCtx)
@@ -26,5 +30,5 @@ func NewManualServers(appCtx *app.AppCtx) ([]transport.Server, func(), error) {
 		servers = append(servers, sseServer)
 	}
 
-	return servers, func() {}, nil
+	return &ManualServers{Servers: servers}, func() {}, nil
 }

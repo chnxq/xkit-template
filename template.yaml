@@ -4,7 +4,7 @@ version: 0.1.0
 
 variables:
   module: xkit-template-v01
-  app_name: XAdmin
+  app_name: Admin
   command_name: xkit-template
   service_name: admin
 
@@ -24,14 +24,21 @@ preserve:
   - go.mod
   - go.sum
   - configs/*.yaml
+  - cmd/server/assets/openapi.yaml
   - internal/bootstrap/hooks.go
   - internal/bootstrap/generated_hooks_ext.go
   - internal/bootstrap/modules.go
+  - internal/bootstrap/generated_servers.gen.go
+  - internal/bootstrap/generated_data_providers.gen.go
   - internal/server/db_logging.go
   - internal/server/options.go
   - internal/server/manual_http_data.go
+  - internal/server/viewer_auth.go
+  - internal/server/rest_register.gen.go
+  - internal/server/grpc_register.gen.go
   - internal/data/bootstrap/data.go
   - internal/data/bootstrap/resources.go
+  - internal/task/**
 
 obsolete:
   - cmd/server/wire.go
