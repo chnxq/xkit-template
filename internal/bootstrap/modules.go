@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"xkit-template-v01/internal/server"
+	"xkit-template-v01/modules"
 	modulehost "xkit-template-v01/shared/modulehost"
 
 	"github.com/chnxq/xkitpkg/app"
@@ -26,21 +27,14 @@ func (r hostModuleRuntime) RegisterGRPC(registrar grpc.ServiceRegistrar) {
 	}
 }
 
-func registeredHostModules() []modulehost.Module {
-	// Keep the host module table here.
-	// Each module should implement shared/modulehost.Module and self-register
-	// through its own module entry instead of requiring per-module host adapters.
-	return nil
-}
-
 func loadHostModules(appCtx *app.AppCtx, cleanup *CleanupStack) ([]hostModuleRuntime, error) {
 	if appCtx == nil {
 		return nil, nil
 	}
 
-	modules := registeredHostModules()
-	runtimes := make([]hostModuleRuntime, 0, len(modules))
-	for _, module := range modules {
+	hostModules := modules.RegisteredHostModules()
+	runtimes := make([]hostModuleRuntime, 0, len(hostModules))
+	for _, module := range hostModules {
 		if module == nil {
 			continue
 		}
