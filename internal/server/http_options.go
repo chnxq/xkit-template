@@ -10,8 +10,7 @@ import (
 	httptransport "github.com/chnxq/xkitpkg/transport/http"
 	httppprof "github.com/chnxq/xkitpkg/transport/http/pprof"
 	"github.com/gorilla/handlers"
-
-	"xkit-template-v01/cmd/server/assets"
+	modulehost "xkit-template-v01/shared/modulehost"
 )
 
 func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.ServerOption, error) {
@@ -92,12 +91,22 @@ func RegisterConfiguredHTTPHandlers(srv *httptransport.Server, appCtx *app.AppCt
 		srv.HandlePrefix("/debug/pprof/", handler)
 	}
 
-	if cfg.GetEnableSwagger() && len(assets.OpenApiData) > 0 {
+	if cfg.GetEnableSwagger() {
+		openAPIData, err := modulehost.MarshalRegisteredOpenAPIDocument("yaml")
+		if err != nil {
+			if appCtx != nil {
+				appCtx.NewLoggerHelper("transport/http").Errorf("load merged OpenAPI document failed: %v", err)
+			}
+			return
+		}
+		if len(openAPIData) == 0 {
+			return
+		}
 		swaggerUI.RegisterSwaggerUIServerWithOption(
 			srv,
 			swaggerUI.WithTitle("API文档"),
 			swaggerUI.WithBasePath("/docs/"),
-			swaggerUI.WithMemoryData(assets.OpenApiData, "yaml"),
+			swaggerUI.WithMemoryData(openAPIData, "yaml"),
 		)
 	}
 }
