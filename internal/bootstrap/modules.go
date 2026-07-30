@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"context"
+	"time"
 
 	"xkit-template-v01/internal/server"
 	_ "xkit-template-v01/modules"
@@ -12,23 +13,21 @@ import (
 	"google.golang.org/grpc"
 )
 
+const moduleShutdownTimeout = 30 * time.Second
+
 type hostModuleRuntime struct {
-	module       modulehost.Module
-	moduleData   any
-	moduleSrv    any
-	registerHTTP func(*httptransport.Server)
-	registerGRPC func(grpc.ServiceRegistrar)
+	runtime modulehost.Runtime
 }
 
 func (r hostModuleRuntime) RegisterHTTP(srv *httptransport.Server) {
-	if r.registerHTTP != nil {
-		r.registerHTTP(srv)
+	if r.runtime != nil {
+		r.runtime.RegisterHTTP(srv)
 	}
 }
 
 func (r hostModuleRuntime) RegisterGRPC(registrar grpc.ServiceRegistrar) {
-	if r.registerGRPC != nil {
-		r.registerGRPC(registrar)
+	if r.runtime != nil {
+		r.runtime.RegisterGRPC(registrar)
 	}
 }
 
@@ -37,72 +36,55 @@ func loadHostModules(appCtx *app.AppCtx, cleanup *CleanupStack) ([]hostModuleRun
 		return nil, nil
 	}
 
-	hostModules := modulehost.GetRegisteredHostModules()
-	runtimes := make([]hostModuleRuntime, 0, len(hostModules))
-	for _, module := range hostModules {
-		if module == nil {
+	hostServices := BuildModuleHostServices(appCtx)
+	definitions := modulehost.Definitions()
+	runtimes := make([]hostModuleRuntime, 0, len(definitions))
+	for _, definition := range definitions {
+		if definition == nil {
 			continue
 		}
-		runtime, err := initHostModule(module, appCtx, cleanup)
+		runtime, err := definition.BuildRuntime(hostServices)
 		if err != nil {
 			return nil, err
 		}
-		if runtime != nil {
-			runtimes = append(runtimes, *runtime)
+		if runtime == nil {
+			continue
 		}
+		runtimes = append(runtimes, hostModuleRuntime{runtime: runtime})
+		cleanup.AddContext(func(parent context.Context) error {
+			ctx, cancel := context.WithTimeout(parent, moduleShutdownTimeout)
+			defer cancel()
+			err := runtime.Close(ctx)
+			if err != nil && appCtx != nil {
+				appCtx.NewLoggerHelper("module/runtime").Errorf(
+					"close module runtime failed: module=%s error=%v",
+					runtime.Descriptor().Code,
+					err,
+				)
+			}
+			return err
+		})
 	}
 	return runtimes, nil
 }
 
-func initHostModule(module modulehost.Module, appCtx *app.AppCtx, cleanup *CleanupStack) (*hostModuleRuntime, error) {
-	moduleData, moduleCleanup, err := module.RegisterData(appCtx)
-	if moduleCleanup != nil {
-		cleanup.Add(moduleCleanup)
+func SyncHostModuleResources(ctx context.Context, syncer modulehost.ResourceSyncer) error {
+	if syncer == nil {
+		return nil
 	}
-	if err != nil {
-		return nil, err
-	}
-
-	moduleServices := module.RegisterServices(appCtx, moduleData)
-	return &hostModuleRuntime{
-		module:     module,
-		moduleData: moduleData,
-		moduleSrv:  moduleServices,
-		registerHTTP: func(srv *httptransport.Server) {
-			module.RegisterHTTP(srv, moduleServices)
-		},
-		registerGRPC: func(registrar grpc.ServiceRegistrar) {
-			module.RegisterGRPC(registrar, moduleServices)
-		},
-	}, nil
-}
-
-func SyncHostModuleResources(ctx context.Context, appCtx *app.AppCtx, runtimes []hostModuleRuntime) error {
-	for _, runtime := range runtimes {
-		if runtime.module == nil {
+	for _, definition := range modulehost.Definitions() {
+		if definition == nil {
 			continue
 		}
-		if err := runtime.module.SyncResources(ctx, appCtx, runtime.moduleData, nil); err != nil {
+		menus := definition.Resources().Menus
+		if len(menus) == 0 {
+			continue
+		}
+		if err := syncer.UpsertMenus(ctx, menus); err != nil {
 			return err
 		}
 	}
 	return nil
-}
-
-func SeedHostModulesDefaultData(ctx context.Context, appCtx *app.AppCtx, runtimes []hostModuleRuntime) error {
-	for _, runtime := range runtimes {
-		if runtime.module == nil {
-			continue
-		}
-		if err := runtime.module.SeedDefaultData(ctx, appCtx, runtime.moduleData); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func LoadHostModulesForSeed(appCtx *app.AppCtx) ([]hostModuleRuntime, error) {
-	return loadHostModules(appCtx, nil)
 }
 
 func hostModuleHTTPRegistrars(runtimes []hostModuleRuntime) []server.ModuleHTTPRegistrar {

@@ -58,9 +58,7 @@ func HTTPServerOptions(appCtx *app.AppCtx, data GeneratedData) ([]httptransport.
 		}
 	}
 	middlewares := commonServerMiddlewares(appCtx, cfgMiddleware)
-	if authViewer := authViewerMiddleware(data); authViewer != nil {
-		middlewares = append(middlewares, authViewer)
-	}
+	middlewares = appendAccessPipeline(middlewares, BuildAccessPipeline(data))
 	middlewares = append(middlewares, HTTPMiddlewares(appCtx)...)
 	if cfg != nil && cfg.GetEnableDbLogging() {
 		if provider, ok := any(data).(serverutils.DatabaseLoggingData); ok {

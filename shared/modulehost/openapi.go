@@ -13,7 +13,8 @@ import (
 const defaultOpenAPIFormat = "yaml"
 
 func RegisteredOpenAPIDocuments() []OpenAPIDocument {
-	docs := make([]OpenAPIDocument, 0, len(modules)+1)
+	definitions := Definitions()
+	docs := make([]OpenAPIDocument, 0, len(definitions)+1)
 	if len(hostassets.OpenApiData) > 0 {
 		docs = append(docs, OpenAPIDocument{
 			Name:     "host",
@@ -22,11 +23,11 @@ func RegisteredOpenAPIDocuments() []OpenAPIDocument {
 			Data:     hostassets.OpenApiData,
 		})
 	}
-	for _, module := range GetRegisteredHostModules() {
-		if module == nil {
+	for _, definition := range definitions {
+		if definition == nil {
 			continue
 		}
-		docs = append(docs, module.OpenAPIDocuments()...)
+		docs = append(docs, definition.Resources().OpenAPI...)
 	}
 	return docs
 }

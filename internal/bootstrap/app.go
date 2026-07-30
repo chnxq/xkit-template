@@ -3,12 +3,13 @@ package bootstrap
 import (
 	"context"
 	"fmt"
+	"time"
 
-	taskruntime "xkit-template-v01/internal/task"
 	"github.com/chnxq/xkitpkg/app"
 	conf "github.com/chnxq/xkitpkg/conf/v1"
 	"github.com/chnxq/xkitpkg/config"
 	"github.com/chnxq/xkitpkg/transport"
+	taskruntime "xkit-template-v01/internal/task"
 
 	databootstrap "xkit-template-v01/internal/data/bootstrap"
 )
@@ -21,6 +22,8 @@ type Options struct {
 	ConfigPath string
 }
 
+const applicationShutdownTimeout = 45 * time.Second
+
 func Initialize(ctx context.Context, opts Options) (*app.App, func(), error) {
 	opts = normalizeOptions(opts)
 
@@ -32,22 +35,28 @@ func Initialize(ctx context.Context, opts Options) (*app.App, func(), error) {
 	cleanup := &CleanupStack{}
 	appCtx, err := newAppContext(ctx, opts, serverConfig, cleanup)
 	if err != nil {
-		cleanup.Run()
+		_ = cleanup.Run(context.WithoutCancel(ctx))
 		return nil, func() {}, err
 	}
 
 	if err := initDataResources(appCtx, cleanup); err != nil {
-		cleanup.Run()
+		_ = cleanup.Run(context.WithoutCancel(ctx))
 		return nil, func() {}, err
 	}
 
 	servers, err := newTransportServers(appCtx, cleanup)
 	if err != nil {
-		cleanup.Run()
+		_ = cleanup.Run(context.WithoutCancel(ctx))
 		return nil, func() {}, err
 	}
 
-	return app.NewApp(appCtx, servers...), cleanup.Run, nil
+	return app.NewApp(appCtx, servers...), func() {
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), applicationShutdownTimeout)
+		defer cancel()
+		if err := cleanup.Run(shutdownCtx); err != nil {
+			appCtx.NewLoggerHelper("bootstrap/cleanup").Errorf("application cleanup failed: %v", err)
+		}
+	}, nil
 }
 
 func normalizeOptions(opts Options) Options {

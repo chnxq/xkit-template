@@ -21,6 +21,7 @@ require (
 	github.com/chnxq/xkitpkg/registry v0.0.0-20260614100214-da276b9ddf99
 	github.com/chnxq/xkitpkg/registry/consul v0.0.0-20260614100214-da276b9ddf99
 	github.com/chnxq/xkitpkg/registry/etcd v0.0.0-20260614100214-da276b9ddf99
+	github.com/chnxq/xkitpkg/secret v0.0.0-20260730144157-1863ed1f7f52
 	github.com/chnxq/xkitpkg/server_utils v0.0.0-20260614100214-da276b9ddf99
 	github.com/chnxq/xkitpkg/tracer v0.0.0-20260614100214-da276b9ddf99
 	github.com/chnxq/xkitpkg/transport v0.0.0-20260614100214-da276b9ddf99
