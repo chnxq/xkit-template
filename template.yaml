@@ -27,7 +27,6 @@ preserve:
   - cmd/server/assets/openapi.yaml
   - internal/bootstrap/hooks.go
   - internal/bootstrap/generated_hooks_ext.go
-  - internal/bootstrap/modules.go
   - internal/bootstrap/generated_servers.gen.go
   - internal/bootstrap/generated_data_providers.gen.go
   - internal/server/db_logging.go
