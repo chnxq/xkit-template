@@ -1,15 +1,31 @@
 package bootstrap
 
 import (
+	"context"
+	"fmt"
 	"time"
 
 	modulehost "xkit-template-v01/shared/modulehost"
 
+	crudviewer "github.com/chnxq/x-crud/viewer"
 	"github.com/chnxq/xkitpkg/app"
 )
 
 type appLoggerFactory struct {
 	appCtx *app.AppCtx
+}
+
+type viewerTenantScopeResolver struct{}
+
+func (viewerTenantScopeResolver) TenantID(ctx context.Context) (uint64, error) {
+	viewer, ok := crudviewer.FromContext(ctx)
+	if !ok || viewer == nil {
+		return 0, fmt.Errorf("module tenant scope requires an authenticated viewer")
+	}
+	if !viewer.IsTenantContext() || viewer.TenantID() == 0 {
+		return 0, fmt.Errorf("module tenant scope requires an explicit tenant context")
+	}
+	return viewer.TenantID(), nil
 }
 
 func (f appLoggerFactory) NewLogger(name string) modulehost.Logger {
@@ -22,8 +38,9 @@ func BuildModuleHostServices(appCtx *app.AppCtx) modulehost.HostServices {
 		return modulehost.HostServices{}
 	}
 	services := modulehost.HostServices{
-		Context: appCtx.AppContext(),
-		Loggers: appLoggerFactory{appCtx: appCtx},
+		Context:      appCtx.AppContext(),
+		Loggers:      appLoggerFactory{appCtx: appCtx},
+		TenantScopes: viewerTenantScopeResolver{},
 	}
 	if cfg := appCtx.GetConfig(); cfg != nil && cfg.GetData() != nil && cfg.GetData().GetDatabase() != nil {
 		database := cfg.GetData().GetDatabase()
