@@ -28,11 +28,12 @@ const (
 )
 
 type Descriptor struct {
-	Code          string
-	Name          string
-	RuntimeKind   RuntimeKind
-	DataIsolation DataIsolationMode
-	Version       string
+	Code            string
+	Name            string
+	RuntimeKind     RuntimeKind
+	DataIsolation   DataIsolationMode
+	DatabaseDialect string
+	Version         string
 }
 
 type Definition interface {
@@ -73,6 +74,7 @@ type DeploymentSpec struct {
 	SecretVersion        string
 	Driver               string
 	Endpoint             string
+	Source               string
 	DatabaseName         string
 	SchemaName           string
 	DesiredSchemaVersion string
@@ -115,6 +117,10 @@ type DeploymentResolver interface {
 	Watch(context.Context) (<-chan DeploymentChange, error)
 }
 
+type TenantScopeResolver interface {
+	TenantID(context.Context) (uint64, error)
+}
+
 type DeploymentChange struct {
 	Key     DeploymentKey
 	Version uint64
@@ -147,12 +153,14 @@ type LoggerFactory interface {
 }
 
 type HostServices struct {
-	Context        context.Context
-	Loggers        LoggerFactory
-	Deployments    DeploymentResolver
-	Secrets        secret.Provider
-	Audit          AuditPublisher
-	ResourceSyncer ResourceSyncer
+	Context           context.Context
+	Loggers           LoggerFactory
+	PrimaryDataSource DeploymentSpec
+	Deployments       DeploymentResolver
+	TenantScopes      TenantScopeResolver
+	Secrets           secret.Provider
+	Audit             AuditPublisher
+	ResourceSyncer    ResourceSyncer
 }
 
 type ResourceBundle struct {
