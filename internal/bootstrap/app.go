@@ -15,11 +15,12 @@ import (
 )
 
 type Options struct {
-	Name       string
-	Version    string
-	BuildTime  string
-	GitCommit  string
-	ConfigPath string
+	Name             string
+	Version          string
+	BuildTime        string
+	GitCommit        string
+	ConfigPath       string
+	ForceStartupSync bool
 }
 
 const applicationShutdownTimeout = 45 * time.Second
