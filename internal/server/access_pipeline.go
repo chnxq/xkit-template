@@ -10,8 +10,14 @@ type AccessPipeline struct {
 	ModuleDeployment middleware.Middleware
 }
 
+// accessPipelineBuilder is supplied by the host when it has authentication
+// and authorization implementations. Generic generated projects may leave it nil.
+var accessPipelineBuilder func(GeneratedData) AccessPipeline
+
 func BuildAccessPipeline(data GeneratedData) AccessPipeline {
-	_ = data
+	if accessPipelineBuilder != nil {
+		return accessPipelineBuilder(data)
+	}
 	return AccessPipeline{}
 }
 
