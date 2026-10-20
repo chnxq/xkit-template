@@ -11,7 +11,7 @@ volumes:
 services:
   postgres:
     container_name: postgres
-    image: docker.io/bitnami/postgresql:latest
+    image: docker.io/soldevelo/postgresql:latest
     restart: always
     ports:
       - "5432:5432"
@@ -39,7 +39,7 @@ services:
 
   redis:
     container_name: redis
-    image: docker.io/bitnami/redis:latest
+    image: docker.io/soldevelo/redis:latest
     restart: always
     ports:
       - "6379:6379"
